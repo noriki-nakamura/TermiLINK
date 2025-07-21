@@ -1,6 +1,6 @@
 # TermiLink
 
-!(README-img/TermiLINK-screenshot.png)
+![Screenshot](README-img/TermiLINK-screenshot.png)
 
 ## 概要
 
