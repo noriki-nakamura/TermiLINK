@@ -55,6 +55,35 @@ TermiLink は、Windows 向けのシンプルなリモートデスクトップ (
     *   `host`: (必須) 接続先のホスト名またはIPアドレス
     *   `user`: (任意) 接続に使用するユーザー名。省略した場合は `Administrator` になります。
 
+## リリースプログラム作成方法
+
+### 仮想環境の準備
+
+他の環境などに影響を及ぼさないよう、仮想環境を作成・移動します。
+
+```powershell
+> python -m venv venv-termilink
+> venv-termilink\Scripts\activate
+```
+
+### 必要なライブラリインストール
+
+現状必要なライブラリは `requirements.txt` に記載していますので、以下のコマンドを実行してライブラリのインストールを行います。
+
+```powershell
+> pip install -r requirements.txt
+```
+
+### ビルド
+
+以下のコマンドを実行し、ビルドを行います。
+
+```powershell
+> pyinstaller --noconsole --onefile .\TermiLINK.py
+```
+
+ビルドされたプログラムは `dist/` フォルダに配置されています。
+
 ## ライセンス
 
 このプロジェクトは MIT License の下で公開されています。
