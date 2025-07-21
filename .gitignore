@@ -1,2 +1,7 @@
 venv-temilink/
 config.yaml
+
+# For pyinstaller
+build/
+dist/
+TermiLINK.spec
