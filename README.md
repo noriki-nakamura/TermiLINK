@@ -1,5 +1,7 @@
 # TermiLink
 
+!(README-img/TermiLINK-screenshot.png)
+
 ## 概要
 
 TermiLink は、Windows 向けのシンプルなリモートデスクトップ (RDP) 接続ランチャーです。
