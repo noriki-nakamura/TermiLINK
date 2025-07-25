@@ -5,3 +5,6 @@ config.yaml
 build/
 dist/
 TermiLINK.spec
+
+# For unittest
+__pycache__
