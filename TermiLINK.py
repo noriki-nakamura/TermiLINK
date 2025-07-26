@@ -4,7 +4,7 @@ import time
 import textwrap
 import tkinter as tk
 from tkinter import ttk
-import yaml
+import yaml  # type: ignore
 import subprocess
 import platform
 
