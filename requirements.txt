@@ -1,2 +1,4 @@
 PyYAML
 pyinstaller
+pytest
+pytest-mock
