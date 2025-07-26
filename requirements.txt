@@ -1,2 +1,5 @@
 PyYAML
 pyinstaller
+pytest
+pytest-mock
+flake8
