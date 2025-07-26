@@ -30,7 +30,6 @@ def initialize_window():
     return (window, tree)
 
 
-
 def load_yaml_data(filepath: str) -> dict:
     try:
         with open(filepath, 'r', encoding='utf-8') as file:
@@ -57,13 +56,21 @@ def populate_tree_recursive(tree: ttk.Treeview, parent_id: str, data: list):
             item_user = item.get('user', 'Administrator')
             item_id = f"{parent_id}_{i}"
             tree.insert(
-                parent=parent_id, index='end', iid=item_id, text=item_name, values=(item_host, item_user)
+                parent=parent_id,
+                index='end',
+                iid=item_id,
+                text=item_name,
+                values=(item_host, item_user)
             )
         else:
             for group_name, sub_items in item.items():
                 sub_group_id = f"{parent_id}_{group_name}"
                 sub_group_node = tree.insert(
-                    parent=parent_id, index='end', iid=sub_group_id, text=group_name, open=True
+                    parent=parent_id,
+                    index='end',
+                    iid=sub_group_id,
+                    text=group_name,
+                    open=True
                 )
                 populate_tree_recursive(tree, sub_group_node, sub_items)
 
@@ -73,20 +80,26 @@ def populate_tree(tree: ttk.Treeview, data: dict):
         tree.delete(item)
 
     for group_name, items in data.items():
-        parent_node = tree.insert(parent='', index='end', iid=group_name, text=group_name, open=True)
+        parent_node = tree.insert(
+            parent='',
+            index='end',
+            iid=group_name,
+            text=group_name,
+            open=True
+        )
         populate_tree_recursive(tree, parent_node, items)
 
 
 def platform_check():
     if platform.system() != "Windows":
-        print(f"Error: This program running for Windows only.")
+        print(f'{"Error: This program running for Windows only."}')
         exit()
 
 
 def start_rdp_connection(host: str, user: str):
     if not host:
         return
-    
+
     rdp_config_path = "tmp_termilink.rdp"
     rdp_content = textwrap.dedent(
         f"""full address:s:{host}
@@ -96,12 +109,11 @@ def start_rdp_connection(host: str, user: str):
 
     with open(rdp_config_path, "w", encoding="utf-8") as f:
         f.write(rdp_content)
-    
     try:
         subprocess.Popen(['mstsc', rdp_config_path])
         time.sleep(0.5)
     except FileNotFoundError:
-        print("Error: mstsc command not found.")
+        print(f'{"Error: mstsc command not found."}')
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     finally:
@@ -126,6 +138,7 @@ def parse_argument():
                         default='config.yaml')
     return parser.parse_args()
 
+
 if __name__ == "__main__":
     platform_check()
     args = parse_argument()
@@ -135,4 +148,3 @@ if __name__ == "__main__":
     populate_tree(tree, yaml_data)
 
     window.mainloop()
-

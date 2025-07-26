@@ -1,15 +1,13 @@
-import os
-import platform
 import textwrap
 from unittest.mock import Mock
+import pytest  # type: ignore
 
-import pytest # type: ignore
 
 from TermiLINK import (
-    load_yaml_data,
-    start_rdp_connection,
-    platform_check,
-    on_tree_double_click,
+  load_yaml_data,
+  start_rdp_connection,
+  platform_check,
+  on_tree_double_click,
 )
 
 
@@ -23,7 +21,6 @@ def valid_yaml_file(tmp_path):
 
 @pytest.fixture
 def invalid_yaml_file(tmp_path):
-    """A fixture that creates a temporary invalid YAML file and returns its path."""
     content = "key: value:"
     file_path = tmp_path / "invalid.yaml"
     file_path.write_text(content, encoding='utf-8')
@@ -54,7 +51,10 @@ class TestRdpConnection:
         user = "testuser"
         rdp_path = "tmp_termilink.rdp"
 
-        mock_exists = mocker.patch('TermiLINK.os.path.exists', return_value=True)
+        mock_exists = mocker.patch(
+            'TermiLINK.os.path.exists',
+            return_value=True
+        )
         mock_remove = mocker.patch('TermiLINK.os.remove')
         mock_popen = mocker.patch('TermiLINK.subprocess.Popen')
         mock_file_open = mocker.patch('builtins.open', mocker.mock_open())
