@@ -43,8 +43,9 @@ jobs:
         pytest -v
 
   build:
-    # testジョブが成功した後に実行される
     needs: test
+    permissions:
+        contents: write
     runs-on: windows-latest
 
     steps:
