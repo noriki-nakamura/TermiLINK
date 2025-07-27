@@ -86,11 +86,10 @@ jobs:
         Compress-Archive -Path TermiLINK -DestinationPath TermiLink-windows.zip
 
     - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: svenstaro/upload-release-action@v2
       with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./TermiLink-windows.zip
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: TermiLink-windows.zip
         asset_name: TermiLink-windows.zip
-        asset_content_type: application/zip
+        tag: ${{ github.ref }}
+        overwrite: true
