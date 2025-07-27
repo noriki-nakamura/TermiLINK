@@ -71,12 +71,8 @@ jobs:
         Copy-Item -Path sample.yaml -Destination dist/config.yaml
         "This ZIP file contains TermiLink.exe and a sample config.yaml." | Out-File -FilePath dist/README.txt -Encoding utf8
 
-    - name: Package into ZIP
-      shell: pwsh
-      run: Compress-Archive -Path dist/* -DestinationPath TermiLink-windows.zip
-
     - name: Upload artifact for inspection
       uses: actions/upload-artifact@v4
       with:
         name: TermiLink-windows-zip
-        path: TermiLink-windows.zip
+        path: dist/
