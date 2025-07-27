@@ -80,7 +80,9 @@ jobs:
 
     - name: Package into ZIP
       shell: pwsh
-      run: Compress-Archive -Path dist/* -DestinationPath TermiLink-windows.zip
+      run: |
+        Rename-Item -Path dist -NewName TermiLINK
+        Compress-Archive -Path TermiLINK -DestinationPath TermiLink-windows.zip
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
