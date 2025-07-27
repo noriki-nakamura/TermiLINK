@@ -7,6 +7,7 @@ from tkinter import ttk
 import yaml  # type: ignore
 import subprocess
 import platform
+import tempfile
 
 
 def initialize_window():
@@ -100,18 +101,23 @@ def start_rdp_connection(host: str, user: str):
     if not host:
         return
 
-    rdp_config_path = "tmp_termilink.rdp"
     rdp_content = textwrap.dedent(
         f"""full address:s:{host}
             username:s:{user}
             prompt for credentials:i:0
         """).strip()
 
-    with open(rdp_config_path, "w", encoding="utf-8") as f:
-        f.write(rdp_content)
+    with tempfile.NamedTemporaryFile(
+        mode='w',
+        suffix='.rdp',
+        delete=False,
+        encoding='utf-8'
+    ) as rdp_file:
+        rdp_config_path = rdp_file.name
+        rdp_file.write(rdp_content)
     try:
         subprocess.Popen(['mstsc', rdp_config_path])
-        time.sleep(0.5)
+        time.sleep(1)
     except FileNotFoundError:
         print(f'{"Error: mstsc command not found."}')
     except Exception as e:
