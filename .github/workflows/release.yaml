@@ -1,0 +1,95 @@
+name: Release Build
+
+on:
+  release:
+    types: [ "created" ]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ matrix.python-version }}-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Lint with flake8
+      run: |
+        flake8 .
+
+    - name: Run tests with pytest
+      run: |
+        pytest -v
+
+  build:
+    # testジョブが成功した後に実行される
+    needs: test
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build executable with PyInstaller
+      run: pyinstaller --noconfirm --onefile --windowed --name TermiLink TermiLINK.py
+
+    - name: Create sample config and README
+      shell: pwsh
+      run: |
+        @"
+        Group1:
+          - name: Server1 (example)
+            host: 192.168.1.1
+          - name: Server2 (example)
+            host: 192.168.1.2
+            user: myuser
+        "@ | Out-File -FilePath dist/config.yaml -Encoding utf8
+
+        "This ZIP file contains TermiLink.exe and a sample config.yaml." | Out-File -FilePath dist/README.txt -Encoding utf8
+
+    - name: Package into ZIP
+      shell: pwsh
+      run: |
+        Rename-Item -Path dist -NewName TermiLINK
+        Compress-Archive -Path TermiLINK -DestinationPath TermiLink-windows.zip
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./TermiLink-windows.zip
+        asset_name: TermiLink-windows.zip
+        asset_content_type: application/zip
