@@ -79,4 +79,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: TermiLink-windows
-        path: TermiLINK/
+        path: TermiLINK/**
