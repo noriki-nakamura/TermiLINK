@@ -49,7 +49,7 @@ class TestRdpConnection:
     def test_start_rdp_connection(self, mocker):
         host = "test.server.com"
         user = "testuser"
-        rdp_path = "tmp_termilink.rdp"
+        temp_rdp_path = "random_name.rdp"
 
         mock_exists = mocker.patch(
             'TermiLINK.os.path.exists',
@@ -57,23 +57,33 @@ class TestRdpConnection:
         )
         mock_remove = mocker.patch('TermiLINK.os.remove')
         mock_popen = mocker.patch('TermiLINK.subprocess.Popen')
-        mock_file_open = mocker.patch('builtins.open', mocker.mock_open())
+        mock_temp_file = mocker.MagicMock()
+        mock_temp_file.__enter__.return_value = mock_temp_file
+        mock_temp_file.__exit__.return_value = None
+        mock_temp_file.name = temp_rdp_path
+        mock_named_temp_file = mocker.patch(
+            'TermiLINK.tempfile.NamedTemporaryFile',
+            return_value=mock_temp_file
+        )
 
         start_rdp_connection(host, user)
 
-        # Assertions
-        mock_file_open.assert_called_once_with(rdp_path, "w", encoding="utf-8")
-        handle = mock_file_open()
+        mock_named_temp_file.assert_called_once_with(
+            mode='w',
+            suffix='.rdp',
+            delete=False,
+            encoding='utf-8'
+        )
         expected_content = textwrap.dedent(
             f"""full address:s:{host}
             username:s:{user}
             prompt for credentials:i:0
         """).strip()
-        handle.write.assert_called_once_with(expected_content)
+        mock_temp_file.write.assert_called_once_with(expected_content)
 
-        mock_popen.assert_called_once_with(['mstsc', rdp_path])
-        mock_exists.assert_called_once_with(rdp_path)
-        mock_remove.assert_called_once_with(rdp_path)
+        mock_popen.assert_called_once_with(['mstsc', temp_rdp_path])
+        mock_exists.assert_called_once_with(temp_rdp_path)
+        mock_remove.assert_called_once_with(temp_rdp_path)
 
     def test_start_rdp_with_no_host(self, mocker):
         mock_popen = mocker.patch('TermiLINK.subprocess.Popen')
