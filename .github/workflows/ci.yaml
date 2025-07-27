@@ -71,12 +71,14 @@ jobs:
         Copy-Item -Path sample.yaml -Destination dist/config.yaml
         "This ZIP file contains TermiLink.exe and a sample config.yaml." | Out-File -FilePath dist/README.txt -Encoding utf8
 
-    - name: Rename output directory
+    - name: Structure artifact for upload
       shell: pwsh
-      run: Rename-Item -Path dist -NewName TermiLINK
+      run: |
+        New-Item -Path "artifact" -ItemType Directory
+        Move-Item -Path "dist" -Destination "artifact/TermiLINK"
 
     - name: Upload artifact for inspection
       uses: actions/upload-artifact@v4
       with:
         name: TermiLink-windows
-        path: TermiLINK/**
+        path: artifact/
