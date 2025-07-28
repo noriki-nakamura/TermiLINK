@@ -27,9 +27,9 @@ def initialize_window():
     tree.pack(fill=tk.BOTH, expand=True)
     tree.bind("<Double-1>", on_tree_double_click)
 
-    tree.column('#0', width=250, minwidth=150, stretch=tk.YES)
+    tree.column('#0', width=100, minwidth=60, stretch=tk.YES)
     tree.heading('#0', text='名前', anchor=tk.W)
-    tree.column('host', width=150, minwidth=120, stretch=tk.NO, anchor=tk.W)
+    tree.column('host', width=200, minwidth=80, stretch=tk.YES, anchor=tk.W)
     tree.heading('host', text='ホスト', anchor=tk.W)
 
     return (window, tree)
