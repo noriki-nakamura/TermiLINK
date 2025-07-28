@@ -15,6 +15,10 @@ def initialize_window():
     window.title("TermiLink")
     window.geometry("500x400")
 
+    icon_path = "TermiLINK.ico"
+    if os.path.exists(icon_path):
+        window.iconbitmap(icon_path)
+
     tree = ttk.Treeview(
         window,
         columns=('host'),
