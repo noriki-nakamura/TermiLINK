@@ -8,14 +8,23 @@ import yaml  # type: ignore
 import subprocess
 import platform
 import tempfile
+import sys
+
+
+def get_resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS  # type: ignore
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 def initialize_window():
     window = tk.Tk()
     window.title("TermiLink")
     window.geometry("500x400")
-
-    icon_path = "TermiLINK.ico"
+    icon_path = get_resource_path("TermiLINK.ico")
     if os.path.exists(icon_path):
         window.iconbitmap(icon_path)
 
