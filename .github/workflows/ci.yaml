@@ -63,7 +63,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Build executable with PyInstaller
-      run: pyinstaller --noconfirm --onefile --windowed --name TermiLink TermiLINK.py
+      run: pyinstaller --onefile --windowed --icon=TermiLINK.ico --add-data "TermiLINK.ico;." TermiLINK.py
 
     - name: Prepare files for packaging
       shell: pwsh
