@@ -30,7 +30,7 @@ def initialize_window():
 
     tree = ttk.Treeview(
         window,
-        columns=('host'),
+        columns=('host', 'user'),
         show='tree headings'
     )
     tree.pack(fill=tk.BOTH, expand=True)
@@ -40,6 +40,8 @@ def initialize_window():
     tree.heading('#0', text='名前', anchor=tk.W)
     tree.column('host', width=200, minwidth=80, stretch=tk.YES, anchor=tk.W)
     tree.heading('host', text='ホスト', anchor=tk.W)
+    tree.column('user', width=200, minwidth=80, stretch=tk.YES, anchor=tk.W)
+    tree.heading('user', text='ユーザー', anchor=tk.W)
 
     return (window, tree)
 
