@@ -23,7 +23,7 @@ def get_resource_path(relative_path):
 def initialize_window():
     window = tk.Tk()
     window.title("TermiLink")
-    window.geometry("500x400")
+    window.geometry("1000x800")
     icon_path = get_resource_path("TermiLINK.ico")
     if os.path.exists(icon_path):
         window.iconbitmap(icon_path)
@@ -36,11 +36,11 @@ def initialize_window():
     tree.pack(fill=tk.BOTH, expand=True)
     tree.bind("<Double-1>", on_tree_double_click)
 
-    tree.column('#0', width=100, minwidth=60, stretch=tk.YES)
+    tree.column('#0', width=400, minwidth=60, stretch=tk.YES)
     tree.heading('#0', text='名前', anchor=tk.W)
-    tree.column('host', width=200, minwidth=80, stretch=tk.YES, anchor=tk.W)
+    tree.column('host', width=250, minwidth=80, stretch=tk.YES, anchor=tk.W)
     tree.heading('host', text='ホスト', anchor=tk.W)
-    tree.column('user', width=200, minwidth=80, stretch=tk.YES, anchor=tk.W)
+    tree.column('user', width=250, minwidth=80, stretch=tk.YES, anchor=tk.W)
     tree.heading('user', text='ユーザー', anchor=tk.W)
 
     return (window, tree)
